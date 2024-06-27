@@ -1,9 +1,9 @@
-package com.asbobryakov.service.parser.impl;
+package com.asbobryakov.bot.blognews.parser.impl;
 
-import com.asbobryakov.dto.Article;
-import com.asbobryakov.dto.ArticleTag;
-import com.asbobryakov.service.parser.BlogParser;
-import com.asbobryakov.utils.RssParser;
+import com.asbobryakov.bot.blognews.dto.Article;
+import com.asbobryakov.bot.blognews.dto.ArticleTag;
+import com.asbobryakov.bot.blognews.parser.BlogParser;
+import com.asbobryakov.bot.blognews.utils.RssParser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.dto.ArticleTag.SPRING;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.SPRING;
 import static java.util.Collections.reverse;
 
 @Slf4j

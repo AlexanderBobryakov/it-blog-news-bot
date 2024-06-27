@@ -1,8 +1,8 @@
-package com.asbobryakov.service.parser.impl;
+package com.asbobryakov.bot.blognews.parser.impl;
 
-import com.asbobryakov.dto.Article;
-import com.asbobryakov.dto.ArticleTag;
-import com.asbobryakov.service.parser.BlogParser;
+import com.asbobryakov.bot.blognews.dto.Article;
+import com.asbobryakov.bot.blognews.dto.ArticleTag;
+import com.asbobryakov.bot.blognews.parser.BlogParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,17 +14,16 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.dto.ArticleTag.TEST_CONTAINERS;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.KAFKA;
 import static java.util.Collections.reverse;
 
 @Slf4j
-public class TestContainersBlogParser implements BlogParser {
-    private static final String BASE_LINK = "https://www.atomicjar.com";
-    private static final String BLOG_LINK = BASE_LINK + "/category/testcontainers/";
+public class KafkaBlogParser implements BlogParser {
+    private static final String BLOG_LINK = "https://kafka.apache.org/blog";
 
     @Override
     public ArticleTag getArticleTag() {
-        return TEST_CONTAINERS;
+        return KAFKA;
     }
 
     @Override
@@ -41,13 +40,15 @@ public class TestContainersBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
-            final var posts = doc.select("article.masonry-blog-item");
-            for (final Element post : posts) {
-                final var linkElement = post.selectFirst("a.entire-meta-link");
-                final var link = BASE_LINK + linkElement.attr("href");
-                final var title = linkElement.attr("aria-label");
-                final var description = post.selectFirst("div.excerpt").text();
-                final var date = post.selectFirst("div.grav-wrap span").text();
+            final var posts = doc.select("article");
+            for (Element post : posts) {
+                final var linkElement = post.selectFirst("h2.bullet a[href]");
+                final var link = BLOG_LINK + linkElement.attr("href");
+                final var title = linkElement.text();
+                final var dateAndAuthor = post.select("h2.bullet").first().nextSibling().toString().trim();;
+                final var date = dateAndAuthor.split(" - ")[0];
+                final var paragraphs = post.select("p");
+                final var description = paragraphs.get(0).text();
                 result.add(new Article(link, title, description, date, getArticleTag()));
             }
         } catch (IOException e) {

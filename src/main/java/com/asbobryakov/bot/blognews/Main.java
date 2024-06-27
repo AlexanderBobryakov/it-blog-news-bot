@@ -1,16 +1,16 @@
-package com.asbobryakov;
+package com.asbobryakov.bot.blognews;
 
-import com.asbobryakov.dto.ArticleTag;
-import com.asbobryakov.service.parser.impl.ApacheBlogParser;
-import com.asbobryakov.service.parser.BlogParser;
-import com.asbobryakov.service.parser.impl.FlinkBlogParser;
-import com.asbobryakov.service.parser.impl.KafkaBlogParser;
-import com.asbobryakov.service.parser.impl.MicroservicesIoBlogParser;
-import com.asbobryakov.service.parser.impl.SpringBlogParser;
-import com.asbobryakov.service.parser.impl.TestContainersBlogParser;
-import com.asbobryakov.service.parser.impl.ThorbenJanssenBlogParser;
-import com.asbobryakov.service.parser.impl.VladMihalceaBlogParser;
-import com.asbobryakov.telegram.ItNewsBot;
+import com.asbobryakov.bot.blognews.dto.ArticleTag;
+import com.asbobryakov.bot.blognews.parser.BlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.ApacheBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.MicroservicesIoBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.SpringBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.ThorbenJanssenBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
+import com.asbobryakov.bot.blognews.telegram.ItNewsBot;
 
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -20,10 +20,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.asbobryakov.utils.Formatting.formatArticleLink;
+import lombok.extern.slf4j.Slf4j;
 
+import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
+
+@Slf4j
 public class Main {
+
     public static void main(String[] args) throws Exception {
+        log.info("Starting application");
         final var itNewsBot = new ItNewsBot(new DefaultBotOptions());
         final var api = new TelegramBotsApi(DefaultBotSession.class);
         api.registerBot(itNewsBot);

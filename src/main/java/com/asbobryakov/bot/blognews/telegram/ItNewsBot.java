@@ -1,8 +1,8 @@
-package com.asbobryakov.telegram;
+package com.asbobryakov.bot.blognews.telegram;
 
-import com.asbobryakov.config.Env;
-import com.asbobryakov.dto.Article;
-import com.asbobryakov.dto.ArticleTag;
+import com.asbobryakov.bot.blognews.config.Env;
+import com.asbobryakov.bot.blognews.dto.Article;
+import com.asbobryakov.bot.blognews.dto.ArticleTag;
 
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.config.Env.CHANNEL_ID;
-import static com.asbobryakov.config.Env.INFO_MESSAGE_ID;
-import static com.asbobryakov.utils.Formatting.formatArticleLink;
-import static com.asbobryakov.utils.Translator.translate;
+import static com.asbobryakov.bot.blognews.config.Env.CHANNEL_ID;
+import static com.asbobryakov.bot.blognews.config.Env.INFO_MESSAGE_ID;
+import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
+import static com.asbobryakov.bot.blognews.utils.Translator.translate;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 

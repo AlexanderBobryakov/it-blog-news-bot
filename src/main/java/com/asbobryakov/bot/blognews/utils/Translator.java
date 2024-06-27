@@ -1,4 +1,4 @@
-package com.asbobryakov.utils;
+package com.asbobryakov.bot.blognews.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -9,8 +9,8 @@ import java.net.URLEncoder;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.config.Env.GOOGLE_TRANSLATE_TOKEN;
-import static com.asbobryakov.config.Env.USE_TRANSLATOR;
+import static com.asbobryakov.bot.blognews.config.Env.GOOGLE_TRANSLATE_TOKEN;
+import static com.asbobryakov.bot.blognews.config.Env.USE_TRANSLATOR;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**

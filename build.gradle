@@ -1,9 +1,19 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'com.asbobryakov'
 version = '1.0-SNAPSHOT'
+mainClassName = 'com.asbobryakov.bot.blognews.Main'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+}
 
 repositories {
     mavenCentral()

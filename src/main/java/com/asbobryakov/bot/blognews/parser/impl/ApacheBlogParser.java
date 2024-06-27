@@ -1,8 +1,8 @@
-package com.asbobryakov.service.parser.impl;
+package com.asbobryakov.bot.blognews.parser.impl;
 
-import com.asbobryakov.dto.Article;
-import com.asbobryakov.dto.ArticleTag;
-import com.asbobryakov.service.parser.BlogParser;
+import com.asbobryakov.bot.blognews.dto.Article;
+import com.asbobryakov.bot.blognews.dto.ArticleTag;
+import com.asbobryakov.bot.blognews.parser.BlogParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.dto.ArticleTag.APACHE;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.APACHE;
 import static java.util.Collections.reverse;
 
 @Slf4j

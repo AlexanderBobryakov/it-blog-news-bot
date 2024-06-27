@@ -1,4 +1,4 @@
-package com.asbobryakov.dto;
+package com.asbobryakov.bot.blognews.dto;
 
 import static java.util.Objects.requireNonNull;
 

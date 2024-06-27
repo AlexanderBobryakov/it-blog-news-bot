@@ -1,4 +1,4 @@
-package com.asbobryakov.config;
+package com.asbobryakov.bot.blognews.config;
 
 import lombok.experimental.UtilityClass;
 

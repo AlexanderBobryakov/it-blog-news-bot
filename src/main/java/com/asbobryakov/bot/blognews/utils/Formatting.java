@@ -1,6 +1,6 @@
-package com.asbobryakov.utils;
+package com.asbobryakov.bot.blognews.utils;
 
-import com.asbobryakov.dto.Article;
+import com.asbobryakov.bot.blognews.dto.Article;
 
 import lombok.experimental.UtilityClass;
 

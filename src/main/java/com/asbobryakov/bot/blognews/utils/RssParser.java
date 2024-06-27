@@ -1,7 +1,7 @@
-package com.asbobryakov.utils;
+package com.asbobryakov.bot.blognews.utils;
 
-import com.asbobryakov.dto.Article;
-import com.asbobryakov.dto.ArticleTag;
+import com.asbobryakov.bot.blognews.dto.Article;
+import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.io.SyndFeedInput;
