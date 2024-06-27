@@ -1,19 +1,12 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group = 'com.asbobryakov'
 version = '1.0-SNAPSHOT'
 mainClassName = 'com.asbobryakov.bot.blognews.Main'
-
-jar {
-    manifest {
-        attributes(
-                'Main-Class': mainClassName
-        )
-    }
-}
 
 repositories {
     mavenCentral()
@@ -23,11 +16,12 @@ dependencies {
     implementation 'org.telegram:telegrambots:6.9.0'
     implementation 'com.rometools:rome:2.1.0'
     implementation 'org.jsoup:jsoup:1.17.2'
-
     implementation 'com.google.cloud:google-cloud-translate:2.6.0'
-
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    // log
+    implementation 'ch.qos.logback:logback-classic:1.5.6'
+    implementation 'org.slf4j:slf4j-api:2.0.13'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -37,4 +31,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+shadowJar {
+    dependsOn check
+    zip64 true
 }
