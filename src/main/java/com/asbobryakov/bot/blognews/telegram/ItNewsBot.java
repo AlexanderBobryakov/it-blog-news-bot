@@ -60,6 +60,7 @@ public class ItNewsBot extends TelegramLongPollingBot {
             """
                 Канал с IT статьями из разных блогов.
                 Связаться с автором можно по ссылке @appp_master
+                Репозиторий - https://github.com/AlexanderBobryakov/it-blog-news-bot
                                 
                 Последние статьи:
                 %s
