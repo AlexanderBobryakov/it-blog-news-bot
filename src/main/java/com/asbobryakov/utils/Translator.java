@@ -10,6 +10,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.asbobryakov.config.Env.GOOGLE_TRANSLATE_TOKEN;
+import static com.asbobryakov.config.Env.USE_TRANSLATOR;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -24,6 +25,9 @@ public class Translator {
     private static final String RU = "ru";
 
     public static String translate(String text) {
+        if (!USE_TRANSLATOR) {
+            return text;
+        }
         try {
             final var urlStr = "https://script.google.com/macros/s/" + GOOGLE_TRANSLATE_TOKEN + "/exec" +
                                "?q=" + URLEncoder.encode(text, UTF_8) +
