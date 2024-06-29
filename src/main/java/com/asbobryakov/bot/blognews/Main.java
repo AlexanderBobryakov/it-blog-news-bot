@@ -16,6 +16,8 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +62,7 @@ public class Main {
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
 
-            log.info("Sleep...");
-            Thread.sleep(30 * 60 * 1000);  // 30 minutes
+            sleep();
         }
     }
 
@@ -92,5 +93,17 @@ public class Main {
         // updating the map of recent articles
         final var newestArticle = articles.getLast();
         lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
+    }
+
+    private static void sleep() {
+        log.info("Sleep...");
+        // wait 10 minutes (can't use `Thread.sleep()` because cloud providers stop running application)
+        final var from = Instant.now();
+        while (true) {
+            if (Duration.between(from, Instant.now()).toMinutes() >= 10) {
+                break;
+            }
+        }
+        System.out.println();
     }
 }
