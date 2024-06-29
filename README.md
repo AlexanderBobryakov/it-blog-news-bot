@@ -58,7 +58,7 @@ docker build -t it-blog-news-bot-app .
 ```bash
 docker run -p 8080:8080 --name it-blog-news-bot-container it-blog-news-bot-app
 ```
-Порт 8080 настроен для healthcheck запущенной java-программы (см Dockerfile и healthcheck.py)
+Порт `8080` настроен для healthcheck запущенной java-программы (см `Dockerfile` и `healthcheck.py`)
 
 ## CI/CD
 Деплой осуществляется в облако [Amvera](https://amvera.ru/) через реализацию web-хука на 

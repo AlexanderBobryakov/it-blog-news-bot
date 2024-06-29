@@ -16,10 +16,14 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
@@ -46,13 +50,16 @@ public class Main {
         );
 
         final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
+        @Cleanup final var executorService = Executors.newFixedThreadPool(blogParsers.size());
         while (true) {
-            blogParsers.forEach(parser -> {
-                processBlogParser(parser, lastArticlesByTags, itNewsBot);
-            });
+            final var futures = new HashSet<CompletableFuture<?>>();
+            for (BlogParser parser : blogParsers) {
+                futures.add(CompletableFuture.runAsync(() -> processBlogParser(parser, lastArticlesByTags, itNewsBot), executorService));
+            }
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
 
-            Thread.sleep(30 * 60 * 1000);  // 30мин
+            Thread.sleep(30 * 60 * 1000);  // 30 minutes
         }
     }
 
@@ -60,21 +67,27 @@ public class Main {
                                           Map<ArticleTag, String> lastArticlesByTags,
                                           ItNewsBot itNewsBot) {
         final var articles = blogParser.parseLastArticles();
-        // определяем какие нужно опубликовать (те, которые 'позже' лежащей в lastArticlesByTags)
+        // determine which ones need to be published (those that are 'later' lying in lastArticlesByTags)
         final var lastPublishedArticleLink = lastArticlesByTags.getOrDefault(blogParser.getArticleTag(), "");
         final var lastPublishedArticleOpt = articles.stream()
             .filter(article -> lastPublishedArticleLink.equals(formatArticleLink(article)) || lastPublishedArticleLink.equals(article.title()))
             .findFirst();
         if (lastPublishedArticleOpt.isEmpty()) {
-            // все - новые, публикуем их
-            articles.forEach(itNewsBot::publishArticle);
+            // all are “new”, we publish them
+            articles.forEach(article -> {
+                itNewsBot.publishArticle(article);
+                Thread.yield();
+            });
         } else {
-            // новые - только после найденного (который публиковали раньше)
+            // “new” are only those that are after the one found (which was published earlier)
             final var lastPublishedArticle = lastPublishedArticleOpt.get();
             final var lastPublishedArticleIndex = articles.indexOf(lastPublishedArticle);
-            articles.stream().skip(lastPublishedArticleIndex + 1).forEach(itNewsBot::publishArticle);
+            articles.stream().skip(lastPublishedArticleIndex + 1).forEach(article -> {
+                itNewsBot.publishArticle(article);
+                Thread.yield();
+            });
         }
-        // обновляем мапу последних сообщений
+        // updating the map of recent articles
         final var newestArticle = articles.getLast();
         lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
     }

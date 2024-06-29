@@ -106,7 +106,7 @@ public class ItNewsBot extends TelegramLongPollingBot {
     }
 
     @SneakyThrows
-    public void publishArticle(Article article) {
+    public synchronized void publishArticle(Article article) {
         sleep();
         final var message = new SendMessage();
         message.setChatId(CHANNEL_ID);
@@ -135,7 +135,7 @@ public class ItNewsBot extends TelegramLongPollingBot {
     }
 
     private void sleep() throws InterruptedException {
-        // cause: Too Many Requests
+        // cause: Telegram "Too Many Requests"
         Thread.sleep(1000L * ThreadLocalRandom.current().nextInt(15, 30));
     }
 }
