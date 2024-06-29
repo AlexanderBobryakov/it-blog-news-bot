@@ -61,7 +61,9 @@ docker run -p 8080:8080 --name it-blog-news-bot-container it-blog-news-bot-app
 Порт `8080` настроен для healthcheck запущенной java-программы (см `Dockerfile` и `healthcheck.py`)
 
 ## CI/CD
-Деплой осуществляется в облако [Amvera](https://amvera.ru/) через реализацию web-хука на 
+Деплой осуществляется в облако [Amvera](https://amvera.ru/) через реализацию web-хука.
+Ссылка на проект [it-blog-news-bot](https://cloud.amvera.ru/projects/compute/it-blog-news-bot)
+Владелец проекта `appp-master`
 
 ## Тестирование
 Тестов пока в репозитории нет, фактическое тестирование осуществляется через второстепенный тестовый канал
