@@ -87,8 +87,10 @@ public class Main {
             });
         }
         // updating the map of recent articles
-        final var newestArticle = articles.getLast();
-        lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
+        if (!articles.isEmpty()) {
+            final var newestArticle = articles.getLast();
+            lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
+        }
     }
 
     private static void sleep() {
