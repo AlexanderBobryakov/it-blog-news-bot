@@ -58,7 +58,6 @@ public class Main {
             }
 //            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
-
 //            sleep();
         }
     }
