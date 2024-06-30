@@ -18,14 +18,10 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
@@ -52,17 +48,18 @@ public class Main {
         );
 
         final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
-        @Cleanup final var executorService = Executors.newFixedThreadPool(blogParsers.size());
+//        @Cleanup final var executorService = Executors.newFixedThreadPool(blogParsers.size());
         while (true) {
-            log.info("Start parsers");
-            final var futures = new HashSet<CompletableFuture<?>>();
+//            log.info("Start parsers");
+//            final var futures = new HashSet<CompletableFuture<?>>();
             for (BlogParser parser : blogParsers) {
-                futures.add(CompletableFuture.runAsync(() -> processBlogParser(parser, lastArticlesByTags, itNewsBot), executorService));
+//                futures.add(CompletableFuture.runAsync(() -> processBlogParser(parser, lastArticlesByTags, itNewsBot), executorService));
+                processBlogParser(parser, lastArticlesByTags, itNewsBot);
             }
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
+//            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
 
-            sleep();
+//            sleep();
         }
     }
 
