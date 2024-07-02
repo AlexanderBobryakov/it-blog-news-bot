@@ -48,17 +48,11 @@ public class Main {
         );
 
         final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
-//        @Cleanup final var executorService = Executors.newFixedThreadPool(blogParsers.size());
         while (true) {
-//            log.info("Start parsers");
-//            final var futures = new HashSet<CompletableFuture<?>>();
             for (BlogParser parser : blogParsers) {
-//                futures.add(CompletableFuture.runAsync(() -> processBlogParser(parser, lastArticlesByTags, itNewsBot), executorService));
                 processBlogParser(parser, lastArticlesByTags, itNewsBot);
             }
-//            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
-//            sleep();
         }
     }
 

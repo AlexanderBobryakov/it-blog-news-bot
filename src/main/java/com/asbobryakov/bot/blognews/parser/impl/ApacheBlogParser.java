@@ -8,7 +8,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class ApacheBlogParser implements BlogParser {
                 final var date = post.selectFirst("time.entry-date.published").text();
                 result.add(new Article(link, title, description, date, getArticleTag()));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", pageUrl, e);
         }
         return result;

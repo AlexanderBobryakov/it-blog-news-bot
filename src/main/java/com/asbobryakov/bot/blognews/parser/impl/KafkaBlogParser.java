@@ -8,7 +8,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class KafkaBlogParser implements BlogParser {
                 final var description = paragraphs.get(0).text();
                 result.add(new Article(link, title, description, date, getArticleTag()));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", pageUrl, e);
         }
         return result;

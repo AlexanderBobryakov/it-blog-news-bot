@@ -29,7 +29,7 @@ public class SpringBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             result.addAll(RssParser.parse(new URL(RSS_LINK), getArticleTag()));
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", RSS_LINK, e);
         }
 

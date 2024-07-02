@@ -4,11 +4,13 @@ import com.asbobryakov.bot.blognews.dto.Article;
 import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 import org.jsoup.Jsoup;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -30,8 +31,7 @@ public class RssParser {
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd MMMM yyyy")
         .localizedBy(Locale.of("ru"));
 
-    @SneakyThrows
-    public static List<Article> parse(URL feedUrl, ArticleTag tag) {
+    public static List<Article> parse(URL feedUrl, ArticleTag tag) throws IOException, FeedException {
         final var result = new ArrayList<Article>();
         final var con = (HttpURLConnection) feedUrl.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");

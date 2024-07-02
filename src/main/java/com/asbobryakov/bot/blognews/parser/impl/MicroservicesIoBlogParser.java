@@ -5,7 +5,6 @@ import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.asbobryakov.bot.blognews.parser.BlogParser;
 import com.asbobryakov.bot.blognews.utils.RssParser;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class MicroservicesIoBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             result.addAll(RssParser.parse(new URL(BLOG_LINK), getArticleTag()));
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", BLOG_LINK, e);
         }
 
