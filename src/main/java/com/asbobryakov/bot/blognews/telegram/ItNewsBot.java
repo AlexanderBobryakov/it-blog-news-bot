@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,6 +32,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 public class ItNewsBot extends TelegramLongPollingBot {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public ItNewsBot(DefaultBotOptions options) {
         super(options, Env.BOT_TOKEN);
     }
@@ -71,7 +75,7 @@ public class ItNewsBot extends TelegramLongPollingBot {
                 lastArticleByTag.entrySet().stream()
                     .map(e -> "<b>" + e.getKey().name() + "</b>: " + e.getValue())
                     .collect(Collectors.joining("\n")),
-                LocalDateTime.now().format(ofPattern("yyyy-MM-dd HH:mm:ss"))
+                LocalDateTime.now(ZoneId.of("Europe/Moscow")).format(DATE_TIME_FORMATTER)
             )
         );
 
