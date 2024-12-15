@@ -49,7 +49,7 @@ public class RssParser {
                         .map(c -> c.stream().map(SyndContent::getValue).collect(Collectors.joining(".\n\n")))
                         .orElse("");
                 });
-            final var description = parseHtmlText(htmlDescription);
+            final var description = htmlDescription.startsWith("<") ? parseHtmlText(htmlDescription) : htmlDescription;
             final var date = entry.getPublishedDate().toInstant();
             result.add(new Article(link, title, description,
                 LocalDate.ofInstant(date, systemDefault()).format(DATE_FORMAT), tag));

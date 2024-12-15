@@ -12,6 +12,10 @@ public enum ArticleTag {
     TEST_CONTAINERS("TestContainers"),
     MICROSERVICES_IO("Microservices_io"),
     THORBEN_JANSSEN("Thorben_Janssen"),
+    DECODABLE("Decodable"),
+    QUASTOR("Quastor"),
+    CONFLUENT("Confluent"),
+    ALGOMASTER("AlgoMaster"),
     ;
 
     private final String value;

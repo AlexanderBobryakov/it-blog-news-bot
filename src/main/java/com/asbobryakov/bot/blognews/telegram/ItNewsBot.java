@@ -51,7 +51,7 @@ public class ItNewsBot extends TelegramLongPollingBot {
 
     @SneakyThrows
     public void updatePinnedMessageBy(Map<ArticleTag, String> lastArticleByTag) {
-        log.info("Update pinned message");
+        log.info("Update pinned message...");
         sleep();
         final var message = new EditMessageText();
         message.setChatId(CHANNEL_ID);

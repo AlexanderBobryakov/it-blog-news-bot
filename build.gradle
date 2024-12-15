@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.telegram:telegrambots:6.9.0'
+    implementation 'org.telegram:telegrambots:6.9.7.1'
     implementation 'com.rometools:rome:2.1.0'
     implementation 'org.jsoup:jsoup:1.17.2'
     implementation 'com.google.cloud:google-cloud-translate:2.6.0'

@@ -13,16 +13,16 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.bot.blognews.dto.ArticleTag.KAFKA;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.ALGOMASTER;
 import static java.util.Collections.reverse;
 
 @Slf4j
-public class KafkaBlogParser implements BlogParser {
-    private static final String BLOG_LINK = "https://kafka.apache.org/blog";
+public class AlgomasterBlogParser implements BlogParser {
+    private static final String BLOG_LINK = "https://blog.algomaster.io/t/system-design";
 
     @Override
     public ArticleTag getArticleTag() {
-        return KAFKA;
+        return ALGOMASTER;
     }
 
     @Override
@@ -39,15 +39,17 @@ public class KafkaBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
-            final var posts = doc.select("article");
-            for (Element post : posts) {
-                final var linkElement = post.selectFirst("h2.bullet a[href]");
-                final var link = BLOG_LINK + linkElement.attr("href");
-                final var title = linkElement.text();
-                final var dateAndAuthor = post.select("h2.bullet").first().nextSibling().toString().trim();;
-                final var date = dateAndAuthor.split(" - ")[0];
-                final var paragraphs = post.select("p");
-                final var description = paragraphs.get(0).text();
+            final var posts = doc.select("div.post-preview-container");
+            for (final Element post : posts) {
+                final var titleElement = post.selectFirst("a[data-testid=post-preview-title]");
+                final var title = titleElement.text();
+                final var link = titleElement.attr("href");
+
+                final var description = post.select("div.post-preview-container").select("a").get(1).text();
+
+                final var dateElement = post.selectFirst("time._date_qpf1t_1");
+                final var date = dateElement.text();
+
                 result.add(new Article(link, title, description, date, getArticleTag()));
             }
         } catch (Exception e) {

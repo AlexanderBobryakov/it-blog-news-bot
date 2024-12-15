@@ -13,16 +13,17 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.bot.blognews.dto.ArticleTag.KAFKA;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.DECODABLE;
 import static java.util.Collections.reverse;
 
 @Slf4j
-public class KafkaBlogParser implements BlogParser {
-    private static final String BLOG_LINK = "https://kafka.apache.org/blog";
+public class DecodableBlogParser implements BlogParser {
+    private static final String BASE_LINK = "https://www.decodable.co";
+    private static final String BLOG_LINK = BASE_LINK + "/blog";
 
     @Override
     public ArticleTag getArticleTag() {
-        return KAFKA;
+        return DECODABLE;
     }
 
     @Override
@@ -39,15 +40,12 @@ public class KafkaBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
-            final var posts = doc.select("article");
+            final var posts = doc.select(".blog-post-related_content");
             for (Element post : posts) {
-                final var linkElement = post.selectFirst("h2.bullet a[href]");
-                final var link = BLOG_LINK + linkElement.attr("href");
-                final var title = linkElement.text();
-                final var dateAndAuthor = post.select("h2.bullet").first().nextSibling().toString().trim();;
-                final var date = dateAndAuthor.split(" - ")[0];
-                final var paragraphs = post.select("p");
-                final var description = paragraphs.get(0).text();
+                final var link = BASE_LINK + post.parent().attr("href");
+                final var title = post.select("h3.heading-style-h5").text();
+                final var description = post.select(".margin-bottom.margin-small .text-size-small").text();
+                final var date = post.select(".blog-grid_meta-wrapper div").first().text();
                 result.add(new Article(link, title, description, date, getArticleTag()));
             }
         } catch (Exception e) {
