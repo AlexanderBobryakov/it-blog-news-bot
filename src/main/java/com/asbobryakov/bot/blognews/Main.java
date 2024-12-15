@@ -2,22 +2,24 @@ package com.asbobryakov.bot.blognews;
 
 import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.asbobryakov.bot.blognews.parser.BlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.AlgomasterBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ApacheBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.DecodableBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.MicroservicesIoBlogParser;
-import com.asbobryakov.bot.blognews.parser.impl.SpringBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ThorbenJanssenBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.ConfluentBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.QuastorBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.SpringBlogParser;
 import com.asbobryakov.bot.blognews.telegram.ItNewsBot;
 
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,13 +46,21 @@ public class Main {
             new VladMihalceaBlogParser(),
             new TestContainersBlogParser(),
             new MicroservicesIoBlogParser(),
-            new ThorbenJanssenBlogParser()
+            new ThorbenJanssenBlogParser(),
+            new DecodableBlogParser(),
+            new QuastorBlogParser(),
+            new ConfluentBlogParser(),
+            new AlgomasterBlogParser()
         );
 
         final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
         while (true) {
             for (BlogParser parser : blogParsers) {
-                processBlogParser(parser, lastArticlesByTags, itNewsBot);
+                try {
+                    processBlogParser(parser, lastArticlesByTags, itNewsBot);
+                } catch (Exception e) {
+                    log.error("Error while processing {}, lastArticlesByTags={}", parser.getArticleTag(), lastArticlesByTags, e);
+                }
             }
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
         }
@@ -63,14 +73,23 @@ public class Main {
         // determine which ones need to be published (those that are 'later' lying in lastArticlesByTags)
         final var lastPublishedArticleLink = lastArticlesByTags.getOrDefault(blogParser.getArticleTag(), "");
         final var lastPublishedArticleOpt = articles.stream()
-            .filter(article -> lastPublishedArticleLink.equals(formatArticleLink(article)) || lastPublishedArticleLink.equals(article.title()))
+            .filter(article -> {
+                return lastPublishedArticleLink.equals(formatArticleLink(article))
+                       || lastPublishedArticleLink.equals(article.title());
+            })
             .findFirst();
         if (lastPublishedArticleOpt.isEmpty()) {
+            log.warn("All are 'new'. Blog = {}, lastArticlesByTags={}, articles={}", blogParser.getArticleTag(), lastArticlesByTags, articles);
             // all are “new”, we publish them
-            articles.forEach(article -> {
+            /*articles.forEach(article -> {
                 itNewsBot.publishArticle(article);
                 Thread.yield();
-            });
+            });*/
+            // send only last
+            if (!articles.isEmpty()) {
+                final var lastArticle = articles.getLast();
+                itNewsBot.publishArticle(lastArticle);
+            }
         } else {
             // “new” are only those that are after the one found (which was published earlier)
             final var lastPublishedArticle = lastPublishedArticleOpt.get();
@@ -85,17 +104,5 @@ public class Main {
             final var newestArticle = articles.getLast();
             lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
         }
-    }
-
-    private static void sleep() {
-        log.info("Sleep...");
-        // wait 10 minutes (can't use `Thread.sleep()` because cloud providers stop running application)
-        final var from = Instant.now();
-        while (true) {
-            if (Duration.between(from, Instant.now()).toMinutes() >= 10) {
-                break;
-            }
-        }
-        System.out.println();
     }
 }
