@@ -18,6 +18,8 @@
 - [VladMihalcea](https://vladmihalcea.com/blog/)
 - [Decodable](https://www.decodable.co/blog)
 - [Quastor](https://blog.quastor.org/archive?page=1)
+- [Confluent](https://www.confluent.io/blog/)
+- [AlgoMaster (system-design)](https://blog.algomaster.io/t/system-design)
 
 ## Описание работы
 
