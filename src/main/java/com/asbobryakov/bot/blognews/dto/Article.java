@@ -14,13 +14,13 @@ public record Article(
                    String description,
                    String date,
                    ArticleTag tag) {
-        this.link = requireNonNull(link, "Link can not be null");
-        this.title = requireNonNull(title, "Title can not be null");
+        this.link = requireNonNull(link, "Link can not be null").trim();
+        this.title = requireNonNull(title, "Title can not be null").trim();
         requireNonNull(description, "Description can not be null");
         this.description = description.length() >= 1000
-            ? description.substring(0, 1000) + "..."
-            : description;
-        this.date = requireNonNull(date, "Date can not be null");
+            ? description.trim().substring(0, 1000) + "..."
+            : description.trim();
+        this.date = requireNonNull(date, "Date can not be null").trim();
         this.tag = requireNonNull(tag, "Tag can not be null");
     }
 }

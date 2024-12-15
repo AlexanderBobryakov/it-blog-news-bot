@@ -16,6 +16,8 @@
 - [TestContainers](https://www.atomicjar.com/category/testcontainers/)
 - [ThorbenJanssen](https://thorben-janssen.com/blog/)
 - [VladMihalcea](https://vladmihalcea.com/blog/)
+- [Decodable](https://www.decodable.co/blog)
+- [Quastor](https://blog.quastor.org/archive?page=1)
 
 ## Описание работы
 

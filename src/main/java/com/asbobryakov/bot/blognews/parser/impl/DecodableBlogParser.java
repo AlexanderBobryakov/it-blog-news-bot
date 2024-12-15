@@ -33,7 +33,7 @@ public class DecodableBlogParser implements BlogParser {
 
         // очередность: от старого к свежему
         reverse(result);
-        return result.stream().unordered().toList();
+        return result;
     }
 
     private List<Article> parseArticlesOnPage(String pageUrl) {
