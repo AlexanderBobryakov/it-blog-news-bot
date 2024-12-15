@@ -14,6 +14,7 @@ public enum ArticleTag {
     THORBEN_JANSSEN("Thorben_Janssen"),
     DECODABLE("Decodable"),
     QUASTOR("Quastor"),
+    CONFLUENT("Confluent"),
     ;
 
     private final String value;

@@ -1,37 +1,28 @@
-package com.asbobryakov.bot.blognews.parser.impl;
+package com.asbobryakov.bot.blognews.parser;
 
 import com.asbobryakov.bot.blognews.dto.Article;
-import com.asbobryakov.bot.blognews.dto.ArticleTag;
-import com.asbobryakov.bot.blognews.parser.BlogParser;
 import com.asbobryakov.bot.blognews.utils.RssParser;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.bot.blognews.dto.ArticleTag.QUASTOR;
+import static java.util.Collections.reverse;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Slf4j
-public class QuastorBlogParser implements BlogParser {
-    private static final String RSS_LINK = "https://rss.beehiiv.com/feeds/nczRb4PQ6t.xml";
-
-    @Override
-    public ArticleTag getArticleTag() {
-        return QUASTOR;
-    }
+public abstract class RssBlogParser implements BlogParser {
 
     @Override
     public List<Article> parseLastArticles() {
         final var result = new ArrayList<Article>();
         try {
             result.addAll(
-                RssParser.parse(new URL(RSS_LINK), getArticleTag()).stream()
+                RssParser.parse(new URL(getRssLink()), getArticleTag()).stream()
                     .filter(a -> isNotBlank(a.description()))
                     .collect(Collectors.toMap(
                         Article::title,
@@ -41,11 +32,13 @@ public class QuastorBlogParser implements BlogParser {
                     ))
                     .values());
         } catch (Exception e) {
-            log.error("Error while parsing articles on page url {}", RSS_LINK, e);
+            log.error("Error while parsing articles on page url {}", getRssLink(), e);
         }
 
         // очередность: от старого к свежему
-        Collections.reverse(result);
+        reverse(result);
         return result;
     }
+
+    protected abstract String getRssLink();
 }
