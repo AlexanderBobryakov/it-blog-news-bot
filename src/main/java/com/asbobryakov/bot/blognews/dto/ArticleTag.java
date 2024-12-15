@@ -15,6 +15,7 @@ public enum ArticleTag {
     DECODABLE("Decodable"),
     QUASTOR("Quastor"),
     CONFLUENT("Confluent"),
+    ALGOMASTER("AlgoMaster"),
     ;
 
     private final String value;
