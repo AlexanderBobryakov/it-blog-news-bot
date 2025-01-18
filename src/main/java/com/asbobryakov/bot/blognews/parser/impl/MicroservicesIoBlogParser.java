@@ -3,6 +3,7 @@ package com.asbobryakov.bot.blognews.parser.impl;
 import com.asbobryakov.bot.blognews.dto.Article;
 import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.asbobryakov.bot.blognews.parser.BlogParser;
+import com.asbobryakov.bot.blognews.parser.exception.ParserFailedException;
 import com.asbobryakov.bot.blognews.utils.RssParser;
 
 import java.net.URL;
@@ -24,12 +25,13 @@ public class MicroservicesIoBlogParser implements BlogParser {
     }
 
     @Override
-    public List<Article> parseLastArticles() {
+    public List<Article> parseLastArticles() throws ParserFailedException {
         final var result = new ArrayList<Article>();
         try {
             result.addAll(RssParser.parse(new URL(BLOG_LINK), getArticleTag()));
         } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", BLOG_LINK, e);
+            throw new ParserFailedException(e);
         }
 
         // очередность: от старого к свежему

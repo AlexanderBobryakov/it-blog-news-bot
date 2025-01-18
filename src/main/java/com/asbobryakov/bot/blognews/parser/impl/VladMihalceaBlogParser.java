@@ -3,6 +3,7 @@ package com.asbobryakov.bot.blognews.parser.impl;
 import com.asbobryakov.bot.blognews.dto.Article;
 import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.asbobryakov.bot.blognews.parser.BlogParser;
+import com.asbobryakov.bot.blognews.parser.exception.ParserFailedException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,7 +27,7 @@ public class VladMihalceaBlogParser implements BlogParser {
     }
 
     @Override
-    public List<Article> parseLastArticles() {
+    public List<Article> parseLastArticles() throws ParserFailedException {
         final var result = new ArrayList<Article>();
         result.addAll(parseArticlesOnPage(BLOG_LINK));
 
@@ -35,7 +36,7 @@ public class VladMihalceaBlogParser implements BlogParser {
         return result;
     }
 
-    private List<Article> parseArticlesOnPage(String pageUrl) {
+    private List<Article> parseArticlesOnPage(String pageUrl) throws ParserFailedException {
         final var result = new ArrayList<Article>();
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
@@ -51,6 +52,7 @@ public class VladMihalceaBlogParser implements BlogParser {
             }
         } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", pageUrl, e);
+            throw new ParserFailedException(e);
         }
         return result;
     }

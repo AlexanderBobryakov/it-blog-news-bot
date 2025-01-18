@@ -2,6 +2,7 @@ package com.asbobryakov.bot.blognews;
 
 import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.asbobryakov.bot.blognews.parser.BlogParser;
+import com.asbobryakov.bot.blognews.parser.exception.ParserFailedException;
 import com.asbobryakov.bot.blognews.parser.impl.AlgomasterBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ApacheBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.DecodableBlogParser;
@@ -68,7 +69,7 @@ public class Main {
 
     private static void processBlogParser(BlogParser blogParser,
                                           Map<ArticleTag, String> lastArticlesByTags,
-                                          ItNewsBot itNewsBot) {
+                                          ItNewsBot itNewsBot) throws ParserFailedException {
         final var articles = blogParser.parseLastArticles();
         // determine which ones need to be published (those that are 'later' lying in lastArticlesByTags)
         final var lastPublishedArticleLink = lastArticlesByTags.getOrDefault(blogParser.getArticleTag(), "");
