@@ -24,6 +24,7 @@
 
 ### [Identification Blog News]()
 - [Webkit (web browser engine)](https://webkit.org/blog/category/privacy/)
+- [Fingerprint](https://fingerprint.com/blog/)
 
 ## Описание работы
 
