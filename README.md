@@ -7,7 +7,8 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## Поддерживаемые блоги
+## Поддерживаемые блоги 
+### [IT Blog News](https://t.me/it_blog_news)
 - [Apache Foundation](https://news.apache.org/)
 - [Flink](https://flink.apache.org/posts/)
 - [Kafka](https://kafka.apache.org/blog)
@@ -20,6 +21,9 @@
 - [Quastor](https://blog.quastor.org/archive?page=1)
 - [Confluent](https://www.confluent.io/blog/)
 - [AlgoMaster (system-design)](https://blog.algomaster.io/t/system-design)
+
+### [Identification Blog News]()
+- [Webkit (web browser engine)](https://webkit.org/blog/category/privacy/)
 
 ## Описание работы
 
