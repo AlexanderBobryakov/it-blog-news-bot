@@ -6,13 +6,15 @@ import com.asbobryakov.bot.blognews.parser.exception.ParserFailedException;
 import com.asbobryakov.bot.blognews.parser.impl.AlgomasterBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ApacheBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.DecodableBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.FingerprintBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
-import com.asbobryakov.bot.blognews.parser.impl.MicroservicesIoBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ThorbenJanssenBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.WebkitBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.ConfluentBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.MicroservicesIoBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.QuastorBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.SpringBlogParser;
 import com.asbobryakov.bot.blognews.telegram.ItNewsBot;
@@ -42,7 +44,7 @@ public class Main {
         final var blogParsers = List.of(
             new KafkaBlogParser(),
             new FlinkBlogParser(),
-            // new SpringBlogParser(),
+            new SpringBlogParser(),
             new ApacheBlogParser(),
             new VladMihalceaBlogParser(),
             new TestContainersBlogParser(),
@@ -51,7 +53,10 @@ public class Main {
             new DecodableBlogParser(),
             new QuastorBlogParser(),
             new ConfluentBlogParser(),
-            new AlgomasterBlogParser()
+            new AlgomasterBlogParser(),
+
+            new WebkitBlogParser(),
+            new FingerprintBlogParser()
         );
 
         final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
