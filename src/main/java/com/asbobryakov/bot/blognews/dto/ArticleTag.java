@@ -16,6 +16,9 @@ public enum ArticleTag {
     QUASTOR("Quastor"),
     CONFLUENT("Confluent"),
     ALGOMASTER("AlgoMaster"),
+
+    WEBKIT("Webkit"),
+    FINGERPRINT("Fingerprint"),
     ;
 
     private final String value;

@@ -1,6 +1,7 @@
 package com.asbobryakov.bot.blognews.parser;
 
 import com.asbobryakov.bot.blognews.dto.Article;
+import com.asbobryakov.bot.blognews.parser.exception.ParserFailedException;
 import com.asbobryakov.bot.blognews.utils.RssParser;
 
 import java.net.URL;
@@ -18,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public abstract class RssBlogParser implements BlogParser {
 
     @Override
-    public List<Article> parseLastArticles() {
+    public List<Article> parseLastArticles() throws ParserFailedException {
         final var result = new ArrayList<Article>();
         try {
             result.addAll(
@@ -33,6 +34,7 @@ public abstract class RssBlogParser implements BlogParser {
                     .values());
         } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", getRssLink(), e);
+            throw new ParserFailedException(e);
         }
 
         // очередность: от старого к свежему

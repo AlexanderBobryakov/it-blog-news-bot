@@ -14,17 +14,17 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.bot.blognews.dto.ArticleTag.DECODABLE;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.FINGERPRINT;
 import static java.util.Collections.reverse;
 
 @Slf4j
-public class DecodableBlogParser implements BlogParser {
-    private static final String BASE_LINK = "https://www.decodable.co";
+public class FingerprintBlogParser implements BlogParser {
+    private static final String BASE_LINK = "https://fingerprint.com/";
     private static final String BLOG_LINK = BASE_LINK + "/blog";
 
     @Override
     public ArticleTag getArticleTag() {
-        return DECODABLE;
+        return FINGERPRINT;
     }
 
     @Override
@@ -41,13 +41,18 @@ public class DecodableBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
-            final var posts = doc.select(".blog-post-related_content");
-            for (Element post : posts) {
-                final var link = BASE_LINK + post.parent().attr("href");
-                final var title = post.select("h3.heading-style-h5").text();
-                final var description = post.select(".margin-bottom.margin-small .text-size-small").text();
-                final var date = post.select(".blog-grid_meta-wrapper div").first().text();
-                result.add(new Article(link, title, description, date, getArticleTag()));
+            final var gridContainer = doc.selectFirst("div[class^=Grid-module--grid]");
+            if (gridContainer != null) {
+                final var posts = gridContainer.select("div[class^=Post-module--post]");
+                for (final Element post : posts) {
+                    final var title = post.select("h1[class^=Post-module--title]").text();
+                    final var link = BASE_LINK + post.select("a").attr("href");
+                    final var description = post.select("p[class^=Post-module--description]").text();
+                    final var date = post.select("span[class^=Post-module--publishDate]").text();
+                    result.add(new Article(link, title, description, date, getArticleTag()));
+                }
+            } else {
+                throw new RuntimeException("Grid div is null");
             }
         } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", pageUrl, e);

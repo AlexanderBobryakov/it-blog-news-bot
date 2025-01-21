@@ -2,16 +2,19 @@ package com.asbobryakov.bot.blognews;
 
 import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.asbobryakov.bot.blognews.parser.BlogParser;
+import com.asbobryakov.bot.blognews.parser.exception.ParserFailedException;
 import com.asbobryakov.bot.blognews.parser.impl.AlgomasterBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ApacheBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.DecodableBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.FingerprintBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
-import com.asbobryakov.bot.blognews.parser.impl.MicroservicesIoBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ThorbenJanssenBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.WebkitBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.ConfluentBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.MicroservicesIoBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.QuastorBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.SpringBlogParser;
 import com.asbobryakov.bot.blognews.telegram.ItNewsBot;
@@ -50,7 +53,10 @@ public class Main {
             new DecodableBlogParser(),
             new QuastorBlogParser(),
             new ConfluentBlogParser(),
-            new AlgomasterBlogParser()
+            new AlgomasterBlogParser(),
+
+            new WebkitBlogParser(),
+            new FingerprintBlogParser()
         );
 
         final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
@@ -68,7 +74,7 @@ public class Main {
 
     private static void processBlogParser(BlogParser blogParser,
                                           Map<ArticleTag, String> lastArticlesByTags,
-                                          ItNewsBot itNewsBot) {
+                                          ItNewsBot itNewsBot) throws ParserFailedException {
         final var articles = blogParser.parseLastArticles();
         // determine which ones need to be published (those that are 'later' lying in lastArticlesByTags)
         final var lastPublishedArticleLink = lastArticlesByTags.getOrDefault(blogParser.getArticleTag(), "");
