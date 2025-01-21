@@ -17,7 +17,8 @@ public enum ArticleTag {
     CONFLUENT("Confluent"),
     ALGOMASTER("AlgoMaster"),
 
-    WEBKIT("webkit"),
+    WEBKIT("Webkit"),
+    FINGERPRINT("Fingerprint"),
     ;
 
     private final String value;
