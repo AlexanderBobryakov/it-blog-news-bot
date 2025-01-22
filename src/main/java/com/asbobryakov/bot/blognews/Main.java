@@ -43,7 +43,7 @@ public class Main {
         final var blogParsers = List.of(
             new KafkaBlogParser(),
             new FlinkBlogParser(),
-            new SpringBlogParser(),
+            // new SpringBlogParser(),
             new ApacheBlogParser(),
             new VladMihalceaBlogParser(),
             new TestContainersBlogParser(),

@@ -25,7 +25,6 @@
 - [Webkit (web browser engine)](https://webkit.org/blog/category/privacy/)
 - [Fingerprint](https://fingerprint.com/blog/)
 
-
 ## Описание работы
 
 Бот регулярно сканирует блоги, формирует из них публикации на каждый отдельный пост
