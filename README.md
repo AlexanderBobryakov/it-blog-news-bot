@@ -15,7 +15,6 @@
 - [Microservices io](https://microservices.io/)
 - [Spring](https://spring.io/blog)
 - [TestContainers](https://www.atomicjar.com/category/testcontainers/)
-- [ThorbenJanssen](https://thorben-janssen.com/blog/)
 - [VladMihalcea](https://vladmihalcea.com/blog/)
 - [Decodable](https://www.decodable.co/blog)
 - [Quastor](https://blog.quastor.org/archive?page=1)

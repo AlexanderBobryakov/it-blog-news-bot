@@ -10,7 +10,6 @@ import com.asbobryakov.bot.blognews.parser.impl.FingerprintBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
-import com.asbobryakov.bot.blognews.parser.impl.ThorbenJanssenBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.WebkitBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.ConfluentBlogParser;
@@ -49,7 +48,6 @@ public class Main {
             new VladMihalceaBlogParser(),
             new TestContainersBlogParser(),
             new MicroservicesIoBlogParser(),
-            new ThorbenJanssenBlogParser(),
             new DecodableBlogParser(),
             new QuastorBlogParser(),
             new ConfluentBlogParser(),

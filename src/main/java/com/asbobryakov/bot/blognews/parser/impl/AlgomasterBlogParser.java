@@ -40,16 +40,13 @@ public class AlgomasterBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
-            final var posts = doc.select("div.post-preview-container");
+            final var gridContainer = doc.selectFirst("div[class=portable-archive-list]");
+            final var posts = gridContainer.select("div._container_6i6j0_1");
             for (final Element post : posts) {
-                final var titleElement = post.selectFirst("a[data-testid=post-preview-title]");
-                final var title = titleElement.text();
-                final var link = titleElement.attr("href");
-
-                final var description = post.select("div.post-preview-container").select("a").get(1).text();
-
-                final var dateElement = post.selectFirst("time._date_qpf1t_1");
-                final var date = dateElement.text();
+                final var title = post.selectFirst("a[data-testid=post-preview-title]").text();
+                final var description = post.selectFirst("div:nth-of-type(2) a").text();
+                final var link = post.selectFirst("a[data-testid=post-preview-title]").attr("href");
+                final var date = post.selectFirst("time").attr("datetime");
 
                 result.add(new Article(link, title, description, date, getArticleTag()));
             }

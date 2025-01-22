@@ -11,7 +11,6 @@ public enum ArticleTag {
     VLAD_MIHALCEA("Vlad_Mihalcea"),
     TEST_CONTAINERS("TestContainers"),
     MICROSERVICES_IO("Microservices_io"),
-    THORBEN_JANSSEN("Thorben_Janssen"),
     DECODABLE("Decodable"),
     QUASTOR("Quastor"),
     CONFLUENT("Confluent"),
