@@ -2,7 +2,7 @@
 
 The project is a telegram bot that scans various IT blogs and publishes them in a telegram channel.
 
-Channel link - [IT Blog News](https://t.me/it_blog_news)
+Channel link - [IT Blog News](https://t.me/it_blog_news)    
 Contact the author via Telegram - [@appp_master](https://t.me/appp_master)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -22,7 +22,7 @@ Contact the author via Telegram - [@appp_master](https://t.me/appp_master)
 - [Confluent](https://www.confluent.io/blog/)
 - [AlgoMaster (system-design)](https://blog.algomaster.io/t/system-design)
 - [DanVega (Java Champion)](https://www.danvega.dev/blog/)
-- 
+
 #### Fingerprint blogs
 - [Webkit (web browser engine)](https://webkit.org/blog/category/privacy/)
 - [Fingerprint](https://fingerprint.com/blog/)
