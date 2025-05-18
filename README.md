@@ -53,7 +53,7 @@ The required variables are listed in the `com.asbobryakov.bot.blognews.config.En
 - `USE_TRANSLATOR` - the flag for translating the description of articles
 
 ## Requirements
-- Java 21 (+ Gradle)
+- Java 17 (+ Gradle)
 - Telegram API
 
 ## Local launch

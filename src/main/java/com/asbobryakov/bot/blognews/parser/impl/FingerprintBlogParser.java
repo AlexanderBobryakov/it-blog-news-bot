@@ -19,7 +19,7 @@ import static com.asbobryakov.bot.blognews.dto.ArticleTag.FINGERPRINT;
 import static java.util.Collections.reverse;
 
 @Slf4j
-public class FingerprintBlogParser implements BlogParser, AutoCloseable {
+public class FingerprintBlogParser implements BlogParser {
     private static final String BLOG_LINK = "https://fingerprint.com/page-data/blog/page-data.json";
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
@@ -78,12 +78,5 @@ public class FingerprintBlogParser implements BlogParser, AutoCloseable {
     @Override
     public boolean isEnabled() {
         return false;
-    }
-
-    @Override
-    public void close() {
-        if (httpClient != null) {
-            httpClient.close();
-        }
     }
 }
