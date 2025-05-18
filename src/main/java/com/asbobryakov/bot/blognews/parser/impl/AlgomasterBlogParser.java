@@ -41,19 +41,26 @@ public class AlgomasterBlogParser implements BlogParser {
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
             final var gridContainer = doc.selectFirst("div[class=portable-archive-list]");
-            final var posts = gridContainer.select("div._container_6i6j0_1");
+            final var posts = gridContainer.select("div[class^=container-]");
             for (final Element post : posts) {
                 final var title = post.selectFirst("a[data-testid=post-preview-title]").text();
                 final var description = post.selectFirst("div:nth-of-type(2) a").text();
                 final var link = post.selectFirst("a[data-testid=post-preview-title]").attr("href");
                 final var date = post.selectFirst("time").attr("datetime");
 
-                result.add(new Article(link, title, description, date, getArticleTag()));
+                if (result.stream().noneMatch(a -> a.title().equals(title))) {
+                    result.add(new Article(link, title, description, date, getArticleTag()));
+                }
             }
         } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", pageUrl, e);
             throw new ParserFailedException(e);
         }
         return result;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

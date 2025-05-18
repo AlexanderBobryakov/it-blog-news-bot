@@ -5,20 +5,20 @@ import com.asbobryakov.bot.blognews.parser.RssBlogParser;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.bot.blognews.dto.ArticleTag.MICROSERVICES_IO;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.AKAMAI;
 
 @Slf4j
-public class MicroservicesIoBlogParser extends RssBlogParser {
-    private static final String BLOG_LINK = "https://microservices.io/feed.xml";
+public class AkamaiBlogParser extends RssBlogParser {
+    private static final String RSS_LINK = "https://feeds.feedburner.com/akamai/sitr";
 
     @Override
     public ArticleTag getArticleTag() {
-        return MICROSERVICES_IO;
+        return AKAMAI;
     }
 
     @Override
     protected String getRssLink() {
-        return BLOG_LINK;
+        return RSS_LINK;
     }
 
     @Override

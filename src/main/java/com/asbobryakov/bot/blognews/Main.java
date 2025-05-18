@@ -9,10 +9,13 @@ import com.asbobryakov.bot.blognews.parser.impl.DecodableBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FingerprintBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.ScrapflyBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.WebkitBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.AkamaiBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.ConfluentBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.DanVegaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.MicroservicesIoBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.QuastorBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.SpringBlogParser;
@@ -22,12 +25,14 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.asbobryakov.bot.blognews.dto.ArticleStatus.DISABLED;
+import static com.asbobryakov.bot.blognews.dto.ArticleStatus.EXCEPTION;
 import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
 
 @Slf4j
@@ -43,7 +48,7 @@ public class Main {
         final var blogParsers = List.of(
             new KafkaBlogParser(),
             new FlinkBlogParser(),
-            // new SpringBlogParser(),
+            new SpringBlogParser(),
             new ApacheBlogParser(),
             new VladMihalceaBlogParser(),
             new TestContainersBlogParser(),
@@ -52,18 +57,25 @@ public class Main {
             new QuastorBlogParser(),
             new ConfluentBlogParser(),
             new AlgomasterBlogParser(),
-
+            new DanVegaBlogParser(),
             new WebkitBlogParser(),
-            new FingerprintBlogParser()
+            new FingerprintBlogParser(),
+            new ScrapflyBlogParser(),
+            new AkamaiBlogParser()
         );
 
-        final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
+        final var lastArticlesByTags = new LinkedHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
         while (true) {
             for (BlogParser parser : blogParsers) {
+                if (!parser.isEnabled()) {
+                    lastArticlesByTags.put(parser.getArticleTag(), DISABLED.getValue());
+                    continue;
+                }
                 try {
                     processBlogParser(parser, lastArticlesByTags, itNewsBot);
                 } catch (Exception e) {
                     log.error("Error while processing {}, lastArticlesByTags={}", parser.getArticleTag(), lastArticlesByTags, e);
+                    lastArticlesByTags.put(parser.getArticleTag(), EXCEPTION.getValue());
                 }
             }
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
@@ -79,18 +91,13 @@ public class Main {
         final var lastPublishedArticleOpt = articles.stream()
             .filter(article -> {
                 return lastPublishedArticleLink.equals(formatArticleLink(article))
-                       || lastPublishedArticleLink.equals(article.title());
+                    || lastPublishedArticleLink.equals(article.title());
             })
             .findFirst();
         if (lastPublishedArticleOpt.isEmpty()) {
             log.warn("All are 'new'. Blog = {}, lastArticlesByTags={}, articles={}", blogParser.getArticleTag(), lastArticlesByTags, articles);
-            // all are “new”, we publish them
-            /*articles.forEach(article -> {
-                itNewsBot.publishArticle(article);
-                Thread.yield();
-            });*/
-            // send only last
-            if (!articles.isEmpty()) {
+            // send only last (not exceptioned)
+            if (!articles.isEmpty() && !lastPublishedArticleLink.equals(EXCEPTION.getValue())) {
                 final var lastArticle = articles.getLast();
                 itNewsBot.publishArticle(lastArticle);
             }
@@ -107,6 +114,8 @@ public class Main {
         if (!articles.isEmpty()) {
             final var newestArticle = articles.getLast();
             lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
+        } else {
+            lastArticlesByTags.put(blogParser.getArticleTag(), "_empty_");
         }
     }
 }

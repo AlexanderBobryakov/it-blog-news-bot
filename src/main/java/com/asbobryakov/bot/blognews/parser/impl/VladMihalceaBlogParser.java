@@ -56,4 +56,9 @@ public class VladMihalceaBlogParser implements BlogParser {
         }
         return result;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

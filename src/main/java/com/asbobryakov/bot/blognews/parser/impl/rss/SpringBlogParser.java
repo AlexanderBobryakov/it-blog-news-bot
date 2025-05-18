@@ -20,4 +20,9 @@ public class SpringBlogParser extends RssBlogParser {
     protected String getRssLink() {
         return RSS_LINK;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

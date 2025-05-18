@@ -9,15 +9,18 @@ public enum ArticleTag {
     SPRING("Spring"),
     APACHE("Apache"),
     VLAD_MIHALCEA("Vlad_Mihalcea"),
-    TEST_CONTAINERS("TestContainers"),
+    TESTCONTAINERS("TestContainers"),
     MICROSERVICES_IO("Microservices_io"),
     DECODABLE("Decodable"),
     QUASTOR("Quastor"),
     CONFLUENT("Confluent"),
     ALGOMASTER("AlgoMaster"),
+    DAN_VEGA("Dan_Vega"),
 
     WEBKIT("Webkit"),
     FINGERPRINT("Fingerprint"),
+    SCRAPFLY("Scrapfly"),
+    AKAMAI("Akamai"),
     ;
 
     private final String value;

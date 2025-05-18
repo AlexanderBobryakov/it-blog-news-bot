@@ -57,4 +57,9 @@ public class KafkaBlogParser implements BlogParser {
         }
         return result;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
