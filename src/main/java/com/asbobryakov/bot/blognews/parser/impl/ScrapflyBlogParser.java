@@ -14,22 +14,23 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.bot.blognews.dto.ArticleTag.ALGOMASTER;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.SCRAPFLY;
 import static java.util.Collections.reverse;
 
 @Slf4j
-public class AlgomasterBlogParser implements BlogParser {
-    private static final String BLOG_LINK = "https://blog.algomaster.io/t/system-design";
+public class ScrapflyBlogParser implements BlogParser {
+    private static final String BASE_LINK = "https://scrapfly.io";
+    private static final String TAG_BLOG_LINK = BASE_LINK + "/blog/tag/blocking/";
 
     @Override
     public ArticleTag getArticleTag() {
-        return ALGOMASTER;
+        return SCRAPFLY;
     }
 
     @Override
     public List<Article> parseLastArticles() throws ParserFailedException {
         final var result = new ArrayList<Article>();
-        result.addAll(parseArticlesOnPage(BLOG_LINK));
+        result.addAll(parseArticlesOnPage(TAG_BLOG_LINK));
 
         // очередность: от старого к свежему
         reverse(result);
@@ -40,17 +41,15 @@ public class AlgomasterBlogParser implements BlogParser {
         final var result = new ArrayList<Article>();
         try {
             final Document doc = Jsoup.connect(pageUrl).get();
-            final var gridContainer = doc.selectFirst("div[class=portable-archive-list]");
-            final var posts = gridContainer.select("div[class^=container-]");
-            for (final Element post : posts) {
-                final var title = post.selectFirst("a[data-testid=post-preview-title]").text();
-                final var description = post.selectFirst("div:nth-of-type(2) a").text();
-                final var link = post.selectFirst("a[data-testid=post-preview-title]").attr("href");
-                final var date = post.selectFirst("time").attr("datetime");
-
-                if (result.stream().noneMatch(a -> a.title().equals(title))) {
-                    result.add(new Article(link, title, description, date, getArticleTag()));
-                }
+            final var postCards = doc.select(".post-card.js-post-card");
+            for (Element card : postCards) {
+                final var singlePostCard = card.selectFirst(".single-post-card");
+                if (singlePostCard == null) continue;
+                final var link = BASE_LINK + singlePostCard.selectFirst("a.post-card-link").attr("href");
+                final var title = singlePostCard.selectFirst("h5.post-title a").text();
+                final var date = singlePostCard.selectFirst("time.card-meta-date").text().trim();
+                final var description = singlePostCard.selectFirst("p.excerpt-text").text();
+                result.add(new Article(link, title, description, date, getArticleTag()));
             }
         } catch (Exception e) {
             log.error("Error while parsing articles on page url {}", pageUrl, e);

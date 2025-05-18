@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 import static java.util.Collections.reverse;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Slf4j
 public abstract class RssBlogParser implements BlogParser {
@@ -24,7 +23,6 @@ public abstract class RssBlogParser implements BlogParser {
         try {
             result.addAll(
                 RssParser.parse(new URL(getRssLink()), getArticleTag()).stream()
-                    .filter(a -> isNotBlank(a.description()))
                     .collect(Collectors.toMap(
                         Article::title,
                         article -> article,

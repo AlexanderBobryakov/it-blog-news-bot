@@ -9,9 +9,11 @@ import com.asbobryakov.bot.blognews.parser.impl.DecodableBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FingerprintBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.ScrapflyBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.WebkitBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.AkamaiBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.ConfluentBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.MicroservicesIoBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.QuastorBlogParser;
@@ -22,7 +24,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,14 +55,17 @@ public class Main {
             new ConfluentBlogParser(),
             new AlgomasterBlogParser(),
             new WebkitBlogParser(),
-            new FingerprintBlogParser()
+            new FingerprintBlogParser(),
+            new ScrapflyBlogParser(),
+            new AkamaiBlogParser()
         );
 
-        final var lastArticlesByTags = new HashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
+        final var lastArticlesByTags = new LinkedHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
         while (true) {
             for (BlogParser parser : blogParsers) {
                 if (!parser.isEnabled()) {
                     lastArticlesByTags.put(parser.getArticleTag(), "_disabled_");
+                    continue;
                 }
                 try {
                     processBlogParser(parser, lastArticlesByTags, itNewsBot);
@@ -110,6 +115,8 @@ public class Main {
         if (!articles.isEmpty()) {
             final var newestArticle = articles.getLast();
             lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
+        } else {
+            lastArticlesByTags.put(blogParser.getArticleTag(), "_empty_");
         }
     }
 }

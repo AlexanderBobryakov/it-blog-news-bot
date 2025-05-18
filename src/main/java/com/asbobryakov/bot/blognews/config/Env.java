@@ -9,7 +9,6 @@ import static java.lang.System.getenv;
 @UtilityClass
 public class Env {
     public static final String CHANNEL_ID = getenv("CHANNEL_ID");
-    public static final int INFO_MESSAGE_ID = parseInt(getenv("INFO_MESSAGE_ID"));
     public static final String BOT_TOKEN = getenv("BOT_TOKEN");
     public static final String GOOGLE_TRANSLATE_TOKEN = getenv("GOOGLE_TRANSLATE_TOKEN");
     public static final boolean USE_TRANSLATOR = parseBoolean(getenv("USE_TRANSLATOR"));

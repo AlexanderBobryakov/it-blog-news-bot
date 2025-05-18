@@ -9,21 +9,25 @@
 
 ## Поддерживаемые блоги 
 ### [IT Blog News](https://t.me/it_blog_news)
-- [Apache Foundation](https://news.apache.org/)
-- [Flink](https://flink.apache.org/posts/)
+#### Техические блоги
 - [Kafka](https://kafka.apache.org/blog)
-- [Microservices io](https://microservices.io/)
+- [Flink](https://flink.apache.org/posts/)
 - [Spring](https://spring.io/blog)
-- [TestContainers](https://www.atomicjar.com/category/testcontainers/)
+- [Apache Foundation](https://news.apache.org/)
 - [VladMihalcea](https://vladmihalcea.com/blog/)
+- [TestContainers](https://www.atomicjar.com/category/testcontainers/)
+- [Microservices io](https://microservices.io/)
 - [Decodable](https://www.decodable.co/blog)
 - [Quastor](https://blog.quastor.org/archive?page=1)
 - [Confluent](https://www.confluent.io/blog/)
 - [AlgoMaster (system-design)](https://blog.algomaster.io/t/system-design)
-
-### [Identification Blog News]()
+- [DanVega (Java Champion)](https://www.danvega.dev/blog/)
+- 
+#### Блоги по fingerprint
 - [Webkit (web browser engine)](https://webkit.org/blog/category/privacy/)
 - [Fingerprint](https://fingerprint.com/blog/)
+- [ScrapFly](https://scrapfly.io/blog/tag/blocking/)
+- [Akamai](https://www.akamai.com/blog/security)
 
 ## Описание работы
 
