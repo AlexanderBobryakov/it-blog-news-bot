@@ -15,6 +15,7 @@ import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.WebkitBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.AkamaiBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.ConfluentBlogParser;
+import com.asbobryakov.bot.blognews.parser.impl.rss.DanVegaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.MicroservicesIoBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.QuastorBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.SpringBlogParser;
@@ -30,6 +31,8 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.asbobryakov.bot.blognews.dto.ArticleStatus.DISABLED;
+import static com.asbobryakov.bot.blognews.dto.ArticleStatus.EXCEPTION;
 import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
 
 @Slf4j
@@ -54,6 +57,7 @@ public class Main {
             new QuastorBlogParser(),
             new ConfluentBlogParser(),
             new AlgomasterBlogParser(),
+            new DanVegaBlogParser(),
             new WebkitBlogParser(),
             new FingerprintBlogParser(),
             new ScrapflyBlogParser(),
@@ -64,14 +68,14 @@ public class Main {
         while (true) {
             for (BlogParser parser : blogParsers) {
                 if (!parser.isEnabled()) {
-                    lastArticlesByTags.put(parser.getArticleTag(), "_disabled_");
+                    lastArticlesByTags.put(parser.getArticleTag(), DISABLED.getValue());
                     continue;
                 }
                 try {
                     processBlogParser(parser, lastArticlesByTags, itNewsBot);
                 } catch (Exception e) {
                     log.error("Error while processing {}, lastArticlesByTags={}", parser.getArticleTag(), lastArticlesByTags, e);
-                    lastArticlesByTags.put(parser.getArticleTag(), "_exception_");
+                    lastArticlesByTags.put(parser.getArticleTag(), EXCEPTION.getValue());
                 }
             }
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
@@ -92,13 +96,8 @@ public class Main {
             .findFirst();
         if (lastPublishedArticleOpt.isEmpty()) {
             log.warn("All are 'new'. Blog = {}, lastArticlesByTags={}, articles={}", blogParser.getArticleTag(), lastArticlesByTags, articles);
-            // all are “new”, we publish them
-            /*articles.forEach(article -> {
-                itNewsBot.publishArticle(article);
-                Thread.yield();
-            });*/
-            // send only last
-            if (!articles.isEmpty()) {
+            // send only last (not exceptioned)
+            if (!articles.isEmpty() && !lastPublishedArticleLink.equals(EXCEPTION.getValue())) {
                 final var lastArticle = articles.getLast();
                 itNewsBot.publishArticle(lastArticle);
             }
