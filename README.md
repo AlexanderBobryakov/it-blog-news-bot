@@ -2,7 +2,7 @@
 
 The project is a telegram bot that scans various IT blogs and publishes them in a telegram channel.
 
-Channel link - [IT Blog News](https://t.me/it_blog_news)
+Channel link - [IT Blog News](https://t.me/it_blog_news)    
 Contact the author via Telegram - [@appp_master](https://t.me/appp_master)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
