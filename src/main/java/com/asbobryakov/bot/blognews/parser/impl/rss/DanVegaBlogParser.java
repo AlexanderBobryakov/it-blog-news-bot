@@ -5,6 +5,8 @@ import com.asbobryakov.bot.blognews.dto.ArticleTag;
 import com.asbobryakov.bot.blognews.parser.RssBlogParser;
 import com.asbobryakov.bot.blognews.parser.exception.ParserFailedException;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +30,15 @@ public class DanVegaBlogParser extends RssBlogParser {
 
     @Override
     public List<Article> parseLastArticles() throws ParserFailedException {
-        return super.parseLastArticles().stream().map(a -> new Article(
+        final var result = new ArrayList<>(super.parseLastArticles().stream().map(a -> new Article(
             BASE_LINK + a.link(),
             a.title(),
             a.description(),
             a.date(),
             a.tag()
-        )).toList().reversed();
+        )).toList());
+        Collections.reverse(result);
+        return result;
     }
 
     @Override

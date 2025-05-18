@@ -29,7 +29,7 @@ import static java.util.Optional.ofNullable;
 @UtilityClass
 public class RssParser {
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd MMMM yyyy")
-        .localizedBy(Locale.of("ru"));
+        .localizedBy(new Locale("ru"));
 
     public static List<Article> parse(URL feedUrl, ArticleTag tag) throws IOException, FeedException {
         final var result = new ArrayList<Article>();

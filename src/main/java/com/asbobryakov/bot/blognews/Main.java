@@ -28,6 +28,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,7 +99,7 @@ public class Main {
             log.warn("All are 'new'. Blog = {}, lastArticlesByTags={}, articles={}", blogParser.getArticleTag(), lastArticlesByTags, articles);
             // send only last (not exceptioned)
             if (!articles.isEmpty() && !lastPublishedArticleLink.equals(EXCEPTION.getValue())) {
-                final var lastArticle = articles.getLast();
+                final var lastArticle = getLast(articles);
                 itNewsBot.publishArticle(lastArticle);
             }
         } else {
@@ -112,10 +113,17 @@ public class Main {
         }
         // updating the map of recent articles
         if (!articles.isEmpty()) {
-            final var newestArticle = articles.getLast();
+            final var newestArticle = getLast(articles);
             lastArticlesByTags.put(blogParser.getArticleTag(), formatArticleLink(newestArticle));
         } else {
             lastArticlesByTags.put(blogParser.getArticleTag(), "_empty_");
         }
+    }
+
+    public static <T> T getLast(List<T> list) {
+        if (list.isEmpty()) {
+            throw new NoSuchElementException("List is empty");
+        }
+        return list.get(list.size() - 1);
     }
 }

@@ -22,7 +22,7 @@ Contact the author via Telegram - [@appp_master](https://t.me/appp_master)
 - [Confluent](https://www.confluent.io/blog/)
 - [AlgoMaster (system-design)](https://blog.algomaster.io/t/system-design)
 - [DanVega (Java Champion)](https://www.danvega.dev/blog/)
-  
+
 #### Fingerprint blogs
 - [Webkit (web browser engine)](https://webkit.org/blog/category/privacy/)
 - [Fingerprint](https://fingerprint.com/blog/)
@@ -53,7 +53,7 @@ The required variables are listed in the `com.asbobryakov.bot.blognews.config.En
 - `USE_TRANSLATOR` - the flag for translating the description of articles
 
 ## Requirements
-- Java 21 (+ Gradle)
+- Java 17 (+ Gradle)
 - Telegram API
 
 ## Local launch
