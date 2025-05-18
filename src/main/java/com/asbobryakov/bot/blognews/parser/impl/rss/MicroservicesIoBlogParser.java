@@ -20,4 +20,9 @@ public class MicroservicesIoBlogParser extends RssBlogParser {
     protected String getRssLink() {
         return BLOG_LINK;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

@@ -24,7 +24,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.asbobryakov.bot.blognews.config.Env.CHANNEL_ID;
-import static com.asbobryakov.bot.blognews.config.Env.INFO_MESSAGE_ID;
 import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
 import static com.asbobryakov.bot.blognews.utils.Translator.translate;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -59,17 +58,17 @@ public class ItNewsBot extends TelegramLongPollingBot {
         sleep();
         final var message = new EditMessageText();
         message.setChatId(CHANNEL_ID);
-        message.setMessageId(INFO_MESSAGE_ID);
+        message.setMessageId(execute(new GetChat(CHANNEL_ID)).getPinnedMessage().getMessageId());
 
         message.setText(
             """
                 Канал с IT статьями из разных блогов.
                 Связаться с автором можно по ссылке @appp_master
                 Репозиторий - https://github.com/AlexanderBobryakov/it-blog-news-bot
-                                
+                
                 Последние статьи:
                 %s
-                            
+                
                 <i>Обновлен: %s</i>
                 """.formatted(
                 lastArticleByTag.entrySet().stream()
@@ -95,16 +94,20 @@ public class ItNewsBot extends TelegramLongPollingBot {
         final var chatInfo = execute(getChat);
         final var text = chatInfo.getPinnedMessage().getText();
 
-        final var articlesByTag = text.substring(text.lastIndexOf("Последние статьи:") + 17, text.lastIndexOf("Обновлен:"))
-            .split("\n");
-        Map<ArticleTag, String> lastArticleByTag = new HashMap<>();
-        for (String tagAndArticle : articlesByTag) {
-            if (isBlank(tagAndArticle)) {
-                continue;
+        final var lastArticleByTag = new HashMap<ArticleTag, String>();
+        try {
+            final var articlesByTag = text.substring(text.lastIndexOf("Последние статьи:") + 17, text.lastIndexOf("Обновлен:"))
+                .split("\n");
+            for (String tagAndArticle : articlesByTag) {
+                if (isBlank(tagAndArticle)) {
+                    continue;
+                }
+                final var tag = tagAndArticle.substring(0, tagAndArticle.indexOf(":"));
+                final var article = tagAndArticle.substring(tagAndArticle.indexOf(":") + 1).trim();
+                lastArticleByTag.put(ArticleTag.valueOf(tag), article);
             }
-            final var tag = tagAndArticle.substring(0, tagAndArticle.indexOf(":"));
-            final var article = tagAndArticle.substring(tagAndArticle.indexOf(":") + 1).trim();
-            lastArticleByTag.put(ArticleTag.valueOf(tag), article);
+        } catch (Exception e) {
+            log.error("Error while parsing pinned message", e);
         }
 
         return lastArticleByTag;
@@ -119,11 +122,11 @@ public class ItNewsBot extends TelegramLongPollingBot {
         message.setText(
             """
                 %s
-                            
+                
                 %s
-                            
+                
                 <i>%s</i>
-                                
+                
                 #%s
                 """.formatted(
                 formatArticleLink(article),

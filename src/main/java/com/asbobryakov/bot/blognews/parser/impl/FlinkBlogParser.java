@@ -66,4 +66,9 @@ public class FlinkBlogParser implements BlogParser {
         }
         return result;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

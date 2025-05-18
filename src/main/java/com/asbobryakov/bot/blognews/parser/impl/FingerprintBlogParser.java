@@ -20,7 +20,7 @@ import static java.util.Collections.reverse;
 @Slf4j
 public class FingerprintBlogParser implements BlogParser {
     private static final String BASE_LINK = "https://fingerprint.com/";
-    private static final String BLOG_LINK = BASE_LINK + "/blog";
+    private static final String BLOG_LINK = BASE_LINK + "blog";
 
     @Override
     public ArticleTag getArticleTag() {
@@ -51,7 +51,7 @@ public class FingerprintBlogParser implements BlogParser {
                     final var date = post.select("span[class^=Post-module--publishDate]").text();
                     result.add(new Article(link, title, description, date, getArticleTag()));
                 }
-            } else {
+            } else {https://fingerprint.com/page-data/blog/page-data.json
                 throw new RuntimeException("Grid div is null");
             }
         } catch (Exception e) {
@@ -59,5 +59,10 @@ public class FingerprintBlogParser implements BlogParser {
             throw new ParserFailedException(e);
         }
         return result;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

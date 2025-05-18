@@ -10,4 +10,6 @@ public interface BlogParser {
     ArticleTag getArticleTag();
 
     List<Article> parseLastArticles() throws ParserFailedException;
+
+    boolean isEnabled();
 }

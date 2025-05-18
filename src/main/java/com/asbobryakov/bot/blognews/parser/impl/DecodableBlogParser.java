@@ -55,4 +55,9 @@ public class DecodableBlogParser implements BlogParser {
         }
         return result;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

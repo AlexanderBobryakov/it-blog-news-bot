@@ -22,9 +22,9 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,7 +43,7 @@ public class Main {
         final var blogParsers = List.of(
             new KafkaBlogParser(),
             new FlinkBlogParser(),
-            // new SpringBlogParser(),
+            new SpringBlogParser(),
             new ApacheBlogParser(),
             new VladMihalceaBlogParser(),
             new TestContainersBlogParser(),
@@ -52,18 +52,21 @@ public class Main {
             new QuastorBlogParser(),
             new ConfluentBlogParser(),
             new AlgomasterBlogParser(),
-
             new WebkitBlogParser(),
             new FingerprintBlogParser()
         );
 
-        final var lastArticlesByTags = new ConcurrentHashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
+        final var lastArticlesByTags = new HashMap<>(itNewsBot.restoreLastArticlesFromPinnedMessage());
         while (true) {
             for (BlogParser parser : blogParsers) {
+                if (!parser.isEnabled()) {
+                    lastArticlesByTags.put(parser.getArticleTag(), "_disabled_");
+                }
                 try {
                     processBlogParser(parser, lastArticlesByTags, itNewsBot);
                 } catch (Exception e) {
                     log.error("Error while processing {}, lastArticlesByTags={}", parser.getArticleTag(), lastArticlesByTags, e);
+                    lastArticlesByTags.put(parser.getArticleTag(), "_exception_");
                 }
             }
             itNewsBot.updatePinnedMessageBy(lastArticlesByTags);
@@ -79,7 +82,7 @@ public class Main {
         final var lastPublishedArticleOpt = articles.stream()
             .filter(article -> {
                 return lastPublishedArticleLink.equals(formatArticleLink(article))
-                       || lastPublishedArticleLink.equals(article.title());
+                    || lastPublishedArticleLink.equals(article.title());
             })
             .findFirst();
         if (lastPublishedArticleOpt.isEmpty()) {
