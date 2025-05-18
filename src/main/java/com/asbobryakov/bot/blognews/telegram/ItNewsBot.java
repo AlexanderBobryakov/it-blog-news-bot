@@ -27,6 +27,7 @@ import static com.asbobryakov.bot.blognews.config.Env.CHANNEL_ID;
 import static com.asbobryakov.bot.blognews.utils.Formatting.formatArticleLink;
 import static com.asbobryakov.bot.blognews.utils.Translator.translate;
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.Locale.ROOT;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
@@ -62,17 +63,18 @@ public class ItNewsBot extends TelegramLongPollingBot {
 
         message.setText(
             """
-                Канал с IT статьями из разных блогов.
-                Связаться с автором можно по ссылке @appp_master
-                Репозиторий - https://github.com/AlexanderBobryakov/it-blog-news-bot
+                Channel with IT articles from different blogs.
                 
-                Последние статьи:
+                Contacts: @appp_master
+                Github: https://github.com/AlexanderBobryakov/it-blog-news-bot
+                
+                Latest articles:
                 %s
                 
-                <i>Обновлен: %s</i>
+                <i>Updated: %s</i>
                 """.formatted(
                 lastArticleByTag.entrySet().stream()
-                    .map(e -> "<b>" + e.getKey().name() + "</b>: " + e.getValue())
+                    .map(e -> "<b> - " + e.getKey().getValue() + "</b>: " + e.getValue())
                     .collect(Collectors.joining("\n")),
                 LocalDateTime.now(ZoneId.of("Europe/Moscow")).format(DATE_TIME_FORMATTER)
             )
@@ -96,15 +98,16 @@ public class ItNewsBot extends TelegramLongPollingBot {
 
         final var lastArticleByTag = new HashMap<ArticleTag, String>();
         try {
-            final var articlesByTag = text.substring(text.lastIndexOf("Последние статьи:") + 17, text.lastIndexOf("Обновлен:"))
+            final var startWords = "Latest articles:";
+            final var articlesByTag = text.substring(text.lastIndexOf(startWords) + startWords.length(), text.lastIndexOf("Updated:"))
                 .split("\n");
             for (String tagAndArticle : articlesByTag) {
                 if (isBlank(tagAndArticle)) {
                     continue;
                 }
-                final var tag = tagAndArticle.substring(0, tagAndArticle.indexOf(":"));
+                final var tag = tagAndArticle.substring(3, tagAndArticle.indexOf(":"));
                 final var article = tagAndArticle.substring(tagAndArticle.indexOf(":") + 1).trim();
-                lastArticleByTag.put(ArticleTag.valueOf(tag), article);
+                lastArticleByTag.put(ArticleTag.valueOf(tag.toUpperCase(ROOT)), article);
             }
         } catch (Exception e) {
             log.error("Error while parsing pinned message", e);

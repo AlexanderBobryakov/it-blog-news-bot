@@ -15,7 +15,7 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.asbobryakov.bot.blognews.dto.ArticleTag.TEST_CONTAINERS;
+import static com.asbobryakov.bot.blognews.dto.ArticleTag.TESTCONTAINERS;
 import static java.util.Collections.reverse;
 
 @Slf4j
@@ -25,7 +25,7 @@ public class TestContainersBlogParser implements BlogParser {
 
     @Override
     public ArticleTag getArticleTag() {
-        return TEST_CONTAINERS;
+        return TESTCONTAINERS;
     }
 
     @Override

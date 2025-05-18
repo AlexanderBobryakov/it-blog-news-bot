@@ -9,7 +9,7 @@ public enum ArticleTag {
     SPRING("Spring"),
     APACHE("Apache"),
     VLAD_MIHALCEA("Vlad_Mihalcea"),
-    TEST_CONTAINERS("TestContainers"),
+    TESTCONTAINERS("TestContainers"),
     MICROSERVICES_IO("Microservices_io"),
     DECODABLE("Decodable"),
     QUASTOR("Quastor"),
