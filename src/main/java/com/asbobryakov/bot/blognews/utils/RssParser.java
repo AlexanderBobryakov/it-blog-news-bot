@@ -13,9 +13,11 @@ import org.jsoup.Jsoup;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -50,7 +52,7 @@ public class RssParser {
                         .orElse("");
                 });
             final var description = htmlDescription.startsWith("<") ? parseHtmlText(htmlDescription) : htmlDescription;
-            final var date = entry.getPublishedDate().toInstant();
+            final var date = ofNullable(entry.getPublishedDate()).map(Date::toInstant).orElse(Instant.now());
             result.add(new Article(link, title, description,
                 LocalDate.ofInstant(date, systemDefault()).format(DATE_FORMAT), tag));
         }
