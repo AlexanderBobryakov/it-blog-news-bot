@@ -10,7 +10,6 @@ import com.asbobryakov.bot.blognews.parser.impl.FingerprintBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.FlinkBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.KafkaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.ScrapflyBlogParser;
-import com.asbobryakov.bot.blognews.parser.impl.TestContainersBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.VladMihalceaBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.WebkitBlogParser;
 import com.asbobryakov.bot.blognews.parser.impl.rss.AkamaiBlogParser;
@@ -46,13 +45,12 @@ public class Main {
         api.registerBot(itNewsBot);
 
         // all blogParsers
-        final var blogParsers = List.of(
+        final var blogParsers = List.<BlogParser>of(
             new KafkaBlogParser(),
             new FlinkBlogParser(),
             new SpringBlogParser(),
             new ApacheBlogParser(),
             new VladMihalceaBlogParser(),
-            new TestContainersBlogParser(),
             new MicroservicesIoBlogParser(),
             new DecodableBlogParser(),
             new QuastorBlogParser(),
